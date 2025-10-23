@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRONOX - Oferta Individual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/wishlist-manager.js"></script>
+    <script src="/js/auth-sync.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo para aplicar la tipografía gótica/dark */
+        .font-brand {
+            font-family: 'UnifrakturCook', cursive;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        /* Glitch Animation */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitch-1 0.5s 3;
+            color: #ff0000;
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitch-2 0.5s 3;
+            color: #00ffff;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 14%, 15%, 49%, 50%, 99%, 100% {
+                transform: translate(0);
+            }
+            15%, 49% {
+                transform: translate(-2px, 2px);
+            }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 20%, 21%, 62%, 63%, 99%, 100% {
+                transform: translate(0);
+            }
+            21%, 62% {
+                transform: translate(2px, -2px);
+            }
+        }
+        
+        .glitch-animation {
+            animation: glitch-flicker 2s 1;
+        }
+        
+        @keyframes glitch-flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.8;
+            }
+        }
+        
+        /* Animación suave para el carrusel de texto */
+        @keyframes smoothScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        /* Estilos para el layout de producto */
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            min-height: calc(100vh - 64px);
+        }
+        
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Ajuste especial para la imagen de la izquierda */
+        .product-image:first-child img {
+            object-fit: contain;
+            object-position: center;
+            max-height: 90%;
+            max-width: 90%;
+            margin: auto;
+        }
+        
+        .product-info-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            max-width: 400px;
+            width: 380px;
+            border-radius: 8px;
+        }
+        
+        .size-button {
+            border: 1px solid white;
+            background: transparent;
+            color: white;
+            padding: 8px 16px;
+            margin: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .size-button:hover,
+        .size-button.selected {
+            background: white;
+            color: black;
+        }
+        
+        .add-to-cart-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .image-nav-arrows {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-arrow {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
+        
+        .nav-arrow:hover {
+            background: white;
+        }
+        
+        @media (max-width: 768px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .product-info-overlay {
+                position: relative;
+                max-width: 100%;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+    <!-- Top Message Bar -->
+    <div class="bg-black border-b border-gray-800 overflow-hidden">
+        <div id="message-carousel" class="flex" style="animation: smoothScroll 20s linear infinite;">
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">WELCOME TO NAMED WORLD. PLEASE ENJOY YOUR STAY.</p>
+            </div>
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">WELCOME TO NAMED WORLD. PLEASE ENJOY YOUR STAY.</p>
+            </div>
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">WELCOME TO NAMED WORLD. PLEASE ENJOY YOUR STAY.</p>
+            </div>
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">WELCOME TO NAMED WORLD. PLEASE ENJOY YOUR STAY.</p>
+            </div>
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">WELCOME TO NAMED WORLD. PLEASE ENJOY YOUR STAY.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-black/80 backdrop-blur-sm sticky top-0 z-50">
+        <nav class="w-full px-0">
+            <div class="flex items-center justify-between h-16 px-4">
+                <div class="flex items-center">
+                    <!-- Menú móvil (icono) -->
+                    <div class="relative">
+                        <button id="menu-toggle" class="p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Abrir menú principal</span>
+                            <!-- Icono de menú (hamburguesa) -->
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Menu Dropdown -->
+                        <div id="menu-dropdown" class="fixed top-0 left-0 h-screen w-[28rem] bg-black text-white shadow-lg z-50 hidden transform -translate-x-full transition-transform duration-500 ease-in-out">
+                            <div class="p-6 h-full flex flex-col">
+                                <div class="flex justify-between items-center mb-8">
+                                    <h3 class="font-mono font-bold text-lg">MENU</h3>
+                                    <button id="close-menu" class="text-white hover:text-gray-400">
+                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Search Bar -->
+                                <div class="mb-8">
+                                    <div class="flex items-center border-b border-gray-600 pb-2">
+                                        <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                        <input type="text" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
+                                    </div>
+                                </div>
+                                
+                                <!-- Navigation Menu -->
+                                <div class="flex-1 overflow-y-auto">
+                                    <nav class="space-y-4">
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">ALL OUR SH*T</a>
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">TRACKSUIT SETS</a>
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">HOODIES</a>
+                                        
+                                        <!-- GIRLY SH*T -->
+                                        <div class="space-y-2">
+                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">GIRLY SH*T</a>
+                                            <div class="ml-4 space-y-2">
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- UNISEX SH*T -->
+                                        <div class="space-y-2">
+                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">UNISEX SH*T</a>
+                                            <div class="ml-4 space-y-2">
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
+                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">COMMUNITY</a>
+                                        
+                                        <!-- MY ACCOUNT -->
+                                        <div class="space-y-2">
+                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">MY ACCOUNT</a>
+                                            <div class="ml-4 space-y-2">
+                                                <a href="account.html" class="block font-mono text-sm text-gray-300 hover:text-white">Account</a>
+                                                <a href="wishlist.html" class="block font-mono text-sm text-gray-300 hover:text-white">Wishlist</a>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Text -->
+                    <div class="ml-6 flex space-x-6">
+                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
+                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
+                    </div>
+                </div>
+                <!-- Logo -->
+                <div class="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2">
+                    <h1 class="font-brand text-4xl md:text-5xl tracking-widest">
+                        <a href="index.html">CRONOX</a>
+                    </h1>
+                </div>
+                <!-- Iconos de la derecha -->
+                <div class="flex items-center space-x-3 ml-auto mr-4">
+                    <a href="buscar.html" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </a>
+                    <a href="login.html" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </a>
+                     <a href="wishlist.html" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </a>
+                    <div class="relative">
+                        <button id="cart-toggle" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Cart Dropdown -->
+                        <div id="cart-dropdown" class="fixed top-0 right-0 h-screen w-[28rem] bg-white text-black shadow-lg z-50 hidden transform translate-x-full transition-transform duration-500 ease-in-out">
+                            <div class="p-6 h-full flex flex-col">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-mono font-bold text-base">Ur Cart (0)</h3>
+                                    <button id="close-cart" class="text-black hover:text-gray-600">
+                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex-1 flex flex-col justify-center items-center">
+                                    <p class="font-mono text-sm mb-4">empty :(</p>
+                                    <button class="bg-black text-white px-4 py-2 font-mono font-bold uppercase border-2 border-dashed border-white hover:bg-white hover:text-black transition-all duration-300 text-xs">
+                                        ADD SOME CHAOS
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Layout de Producto Individual -->
+        <div class="product-layout">
+            <!-- Imagen Izquierda - Imagen Principal del Producto -->
+            <div class="product-image relative">
+                <img id="left-image" src="" alt="Imagen Principal" class="w-full h-full object-cover" style="display: none;">
+            </div>
+            
+            <!-- Imagen Central - Modelo 1 -->
+            <div class="product-image">
+                <img id="center-image" src="" alt="Modelo 1" class="w-full h-full object-cover" style="display: none;">
+            </div>
+            
+            <!-- Imagen Derecha - Modelo 2 con Overlay de Información -->
+            <div class="product-image relative">
+                <img id="right-image" src="" alt="Modelo 2" class="w-full h-full object-cover" style="display: none;">
+                
+                <!-- Overlay de Información del Producto -->
+                <div class="product-info-overlay">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="font-mono font-bold text-lg uppercase product-name">GLITCH EYELET TUBE TOP BLACK</h2>
+                        <button class="heart-link text-white hover:text-gray-300" 
+                                data-product-id="" 
+                                data-product-name="" 
+                                data-product-price="" 
+                                data-product-image="">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <p class="font-mono font-bold text-xl mb-4 product-price">€50,00</p>
+                    
+                    <!-- Descripción del producto -->
+                    <div class="mb-4">
+                        <p class="font-mono text-sm product-description">Descripción del producto se cargará aquí</p>
+                    </div>
+                    
+                    <!-- Selección de Color -->
+                    <div class="mb-4">
+                        <p class="font-mono text-sm mb-2">Select Colour: BLACK</p>
+                        <div class="flex">
+                            <div class="w-6 h-6 border-2 border-white bg-black"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Selección de Talla -->
+                    <div class="mb-4">
+                        <p class="font-mono text-sm mb-2" id="size-label">Select Size: S</p>
+                        <div class="flex flex-wrap">
+                            <button class="size-button selected" data-size="S">
+                                <span>S</span>
+                                <span class="stock-info text-xs">Cargando...</span>
+                            </button>
+                            <button class="size-button" data-size="M">
+                                <span>M</span>
+                                <span class="stock-info text-xs">Cargando...</span>
+                            </button>
+                            <button class="size-button" data-size="L">
+                                <span>L</span>
+                                <span class="stock-info text-xs">Cargando...</span>
+                            </button>
+                            <button class="size-button" data-size="XL">
+                                <span>XL</span>
+                                <span class="stock-info text-xs">Cargando...</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Información del Modelo -->
+                    <p class="font-mono text-xs mb-4">Jing is 5ft 8 (172cm) and wears a size M here</p>
+                    
+                    <!-- Guía de Tallas -->
+                    <div class="mb-4">
+                        <a href="#" class="font-mono text-xs text-white hover:text-gray-300 flex items-center">
+                            <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-9 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2" />
+                            </svg>
+                            SIZE GUIDE
+                        </a>
+                    </div>
+                    
+                    <!-- Botón Add to Cart -->
+                    <button class="add-to-cart-btn">
+                        ADD TO CART
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Ayuda</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Envíos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Devoluciones</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Contacto</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Legal</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Términos de Servicio</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Compañía</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Sobre Nosotros</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Comunidad</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Síguenos</h5>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+                        </a>
+                         <a href="#" class="text-gray-400 hover:text-white">
+                           <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.793 2.013 10.147 2 12.315 2zm0 1.623c-2.372 0-2.686.009-3.637.053-.877.04-1.354.197-1.824.372a3.272 3.272 0 00-1.15 1.15c-.176.47-.333.947-.372 1.824-.044.951-.053 1.265-.053 3.637s.009 2.686.053 3.637c.04.877.196 1.354.372 1.824a3.272 3.272 0 001.15 1.15c.47.176.947.333 1.824.372.951.044 1.265.053 3.637.053s2.686-.009 3.637-.053c.877-.04 1.354-.197 1.824-.372a3.272 3.272 0 001.15-1.15c.176-.47.333-.947.372-1.824.044-.951.053-1.265.053-3.637s-.009-2.686-.053-3.637c-.04-.877-.196-1.354-.372-1.824a3.272 3.272 0 00-1.15-1.15c-.47-.176-.947-.333-1.824-.372C15.001 3.632 14.687 3.623 12.315 3.623zM12 8.118c-2.147 0-3.882 1.735-3.882 3.882s1.735 3.882 3.882 3.882 3.882-1.735 3.882-3.882-1.735-3.882-3.882-3.882zm0 6.162c-1.258 0-2.28-1.022-2.28-2.28s1.022-2.28 2.28-2.28 2.28 1.022 2.28 2.28-1.022 2.28-2.28 2.28zm4.965-6.505c-.787 0-1.425.638-1.425 1.425s.638 1.425 1.425 1.425 1.425-.638 1.425-1.425-.638-1.425-1.425-1.425z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 CRONOX. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript para el carrito y menú -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartToggle = document.getElementById('cart-toggle');
+            const cartDropdown = document.getElementById('cart-dropdown');
+            const closeCart = document.getElementById('close-cart');
+            
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuDropdown = document.getElementById('menu-dropdown');
+            const closeMenu = document.getElementById('close-menu');
+
+            // Abrir/cerrar el carrito
+            cartToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (cartDropdown.classList.contains('hidden')) {
+                    cartDropdown.classList.remove('hidden');
+                    setTimeout(() => {
+                        cartDropdown.classList.remove('translate-x-full');
+                    }, 10);
+                } else {
+                    cartDropdown.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        cartDropdown.classList.add('hidden');
+                    }, 500);
+                }
+            });
+
+            // Cerrar el carrito con el botón X
+            closeCart.addEventListener('click', function() {
+                cartDropdown.classList.add('translate-x-full');
+                setTimeout(() => {
+                    cartDropdown.classList.add('hidden');
+                }, 500);
+            });
+
+            // Cerrar el carrito al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!cartToggle.contains(e.target) && !cartDropdown.contains(e.target)) {
+                    if (!cartDropdown.classList.contains('hidden')) {
+                        cartDropdown.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            cartDropdown.classList.add('hidden');
+                        }, 500);
+                    }
+                }
+            });
+
+            // Prevenir que el clic en el dropdown cierre el carrito
+            cartDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Abrir/cerrar el menú
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (menuDropdown.classList.contains('hidden')) {
+                    menuDropdown.classList.remove('hidden');
+                    setTimeout(() => {
+                        menuDropdown.classList.remove('-translate-x-full');
+                    }, 10);
+                } else {
+                    menuDropdown.classList.add('-translate-x-full');
+                    setTimeout(() => {
+                        menuDropdown.classList.add('hidden');
+                    }, 500);
+                }
+            });
+
+            // Cerrar el menú con el botón X
+            closeMenu.addEventListener('click', function() {
+                menuDropdown.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    menuDropdown.classList.add('hidden');
+                }, 500);
+            });
+
+            // Cerrar el menú al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    if (!menuDropdown.classList.contains('hidden')) {
+                        menuDropdown.classList.add('-translate-x-full');
+                        setTimeout(() => {
+                            menuDropdown.classList.add('hidden');
+                        }, 500);
+                    }
+                }
+            });
+
+            // Prevenir que el clic en el dropdown cierre el menú
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Glitch effect on page load
+            function createGlitchEffect() {
+                const glitchElements = document.querySelectorAll('.glitch-text');
+                
+                glitchElements.forEach(element => {
+                    const originalText = element.textContent;
+                    const glitchChars = ['!', '@', '#', '$', '%', '^', '&', '*', '?', ']', '[', '~', '`'];
+                    
+                    // Add glitch animation class
+                    element.classList.add('glitch-animation');
+                    
+                    // Create glitch effect
+                    let glitchInterval = setInterval(() => {
+                        let glitchedText = '';
+                        for (let i = 0; i < originalText.length; i++) {
+                            if (Math.random() < 0.3) {
+                                glitchedText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                            } else {
+                                glitchedText += originalText[i];
+                            }
+                        }
+                        element.textContent = glitchedText;
+                    }, 100);
+                    
+                    // Stop glitch after 2 seconds
+                    setTimeout(() => {
+                        clearInterval(glitchInterval);
+                        element.textContent = originalText;
+                        element.classList.remove('glitch-animation');
+                    }, 2000);
+                });
+            }
+
+            // Run glitch effect on page load
+            createGlitchEffect();
+
+            // Funcionalidad de selección de tallas
+            const sizeButtons = document.querySelectorAll('.size-button');
+            const sizeLabel = document.getElementById('size-label');
+            
+            sizeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remover clase selected de todos los botones
+                    sizeButtons.forEach(btn => btn.classList.remove('selected'));
+                    // Agregar clase selected al botón clickeado
+                    this.classList.add('selected');
+                    
+                    // Actualizar el texto del label con la talla seleccionada
+                    const selectedSize = this.getAttribute('data-size');
+                    sizeLabel.textContent = `Select Size: ${selectedSize}`;
+                });
+            });
+
+
+            // Funcionalidad del botón Add to Cart
+            const addToCartBtn = document.querySelector('.add-to-cart-btn');
+            addToCartBtn.addEventListener('click', function() {
+                // Aquí puedes agregar la lógica para agregar al carrito
+                console.log('Producto agregado al carrito');
+                // Mostrar notificación
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-20 right-4 bg-black text-white px-4 py-2 rounded font-mono text-sm z-50';
+                notification.textContent = 'Producto agregado al carrito';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            });
+
+            // ===== FUNCIONALIDAD DINÁMICA DE PRODUCTOS =====
+            
+            // Extraer ID del producto de la URL
+            function getProductIdFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id');
+            }
+
+            // Cargar datos del producto desde la API
+            async function loadProductData(productId) {
+                try {
+                    console.log(`🔄 Cargando datos del producto ID: ${productId}`);
+                    
+                    const response = await fetch(`/api/products/${productId}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        console.log('✅ Datos del producto cargados:', data.data);
+                        return data.data;
+                    } else {
+                        throw new Error(data.error || 'Error al cargar el producto');
+                    }
+                } catch (error) {
+                    console.error('❌ Error cargando producto:', error);
+                    throw error;
+                }
+            }
+
+            // Rellenar la página con los datos del producto
+            function populateProductData(product) {
+                console.log('🔄 Rellenando página con datos del producto:', product);
+                
+                // Actualizar título de la página
+                document.title = `CRONOX - ${product.name}`;
+                
+                // Actualizar nombre del producto
+                const productNameElement = document.querySelector('.product-name');
+                if (productNameElement) {
+                    productNameElement.textContent = product.name;
+                }
+                
+                // Actualizar precio
+                const priceElement = document.querySelector('.product-price');
+                if (priceElement) {
+                    priceElement.textContent = `€${parseFloat(product.price).toFixed(2)}`;
+                }
+                
+                // Actualizar descripción
+                const descriptionElement = document.querySelector('.product-description');
+                if (descriptionElement) {
+                    descriptionElement.textContent = product.description || 'Sin descripción disponible';
+                }
+                
+                // Actualizar imagen principal
+                const mainImageElement = document.getElementById('left-image');
+                if (mainImageElement && product.image_url) {
+                    mainImageElement.src = product.image_url;
+                    mainImageElement.alt = product.name;
+                    mainImageElement.style.display = 'block';
+                }
+                
+                // Actualizar imagen central (model_image_1)
+                const centerImageElement = document.getElementById('center-image');
+                if (centerImageElement) {
+                    if (product.model_image_1) {
+                        centerImageElement.src = product.model_image_1;
+                        centerImageElement.alt = `${product.name} - Modelo 1`;
+                        centerImageElement.style.display = 'block';
+                        console.log('📸 Imagen de modelo 1 cargada:', product.model_image_1);
+                    } else {
+                        // Si no hay imagen de modelo 1, usar imagen por defecto
+                        centerImageElement.src = product.image_url || '/LOVED BY THE COMMUNITY/prenda1.png';
+                        centerImageElement.alt = `${product.name} - Vista principal`;
+                        centerImageElement.style.display = 'block';
+                        console.log('📸 Usando imagen principal como modelo 1');
+                    }
+                }
+                
+                // Actualizar imagen derecha (model_image_2)
+                const rightImageElement = document.getElementById('right-image');
+                if (rightImageElement) {
+                    if (product.model_image_2) {
+                        rightImageElement.src = product.model_image_2;
+                        rightImageElement.alt = `${product.name} - Modelo 2`;
+                        rightImageElement.style.display = 'block';
+                        console.log('📸 Imagen de modelo 2 cargada:', product.model_image_2);
+                    } else {
+                        // Si no hay imagen de modelo 2, usar imagen por defecto
+                        rightImageElement.src = product.image_url || '/LOVED BY THE COMMUNITY/prenda1.png';
+                        rightImageElement.alt = `${product.name} - Vista principal`;
+                        rightImageElement.style.display = 'block';
+                        console.log('📸 Usando imagen principal como modelo 2');
+                    }
+                }
+                
+                // Actualizar stock por tallas
+                updateStockInfo(product);
+                
+                console.log('✅ Página actualizada con datos del producto');
+            }
+
+            // Actualizar información de stock
+            function updateStockInfo(product) {
+                const stockElements = {
+                    'S': document.querySelector('[data-size="S"] .stock-info'),
+                    'M': document.querySelector('[data-size="M"] .stock-info'),
+                    'L': document.querySelector('[data-size="L"] .stock-info'),
+                    'XL': document.querySelector('[data-size="XL"] .stock-info')
+                };
+                
+                Object.keys(stockElements).forEach(size => {
+                    const element = stockElements[size];
+                    if (element) {
+                        const stockKey = `stock_${size.toLowerCase()}`;
+                        const stock = product[stockKey] || 0;
+                        element.textContent = `${stock} disponibles`;
+                        
+                        // Deshabilitar botón si no hay stock
+                        const button = element.closest('.size-button');
+                        if (button) {
+                            if (stock === 0) {
+                                button.classList.add('disabled');
+                                button.disabled = true;
+                            } else {
+                                button.classList.remove('disabled');
+                                button.disabled = false;
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Función principal para inicializar la carga del producto
+            async function initializeProduct() {
+                const productId = getProductIdFromUrl();
+                
+                if (!productId) {
+                    console.error('❌ No se encontró ID de producto en la URL');
+                    // Mostrar mensaje de error o redirigir
+                    document.body.innerHTML = `
+                        <div class="min-h-screen bg-black text-white flex items-center justify-center">
+                            <div class="text-center">
+                                <h1 class="text-2xl font-mono mb-4">Producto no encontrado</h1>
+                                <p class="text-gray-400 mb-8">No se pudo cargar la información del producto</p>
+                                <a href="../index.html" class="bg-white text-black px-6 py-3 font-mono uppercase tracking-wider hover:bg-gray-200 transition-colors">
+                                    Volver al inicio
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                try {
+                    const product = await loadProductData(productId);
+                    populateProductData(product);
+                } catch (error) {
+                    console.error('❌ Error inicializando producto:', error);
+                    // Mostrar mensaje de error
+                    document.body.innerHTML = `
+                        <div class="min-h-screen bg-black text-white flex items-center justify-center">
+                            <div class="text-center">
+                                <h1 class="text-2xl font-mono mb-4">Error al cargar producto</h1>
+                                <p class="text-gray-400 mb-8">${error.message}</p>
+                                <a href="../index.html" class="bg-white text-black px-6 py-3 font-mono uppercase tracking-wider hover:bg-gray-200 transition-colors">
+                                    Volver al inicio
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Inicializar la carga del producto
+            initializeProduct();
+            
+            // 🎯 FUNCIONALIDAD DE WISHLIST PARA INDIVIDUAL-OFFER
+            function initializeWishlistForIndividualOffer() {
+                // Obtener el botón de corazón
+                const heartButton = document.querySelector('.heart-link');
+                if (!heartButton) return;
+                
+                // Obtener datos del producto actual
+                const productName = document.querySelector('.product-name')?.textContent || '';
+                const productPrice = document.querySelector('.product-price')?.textContent || '';
+                const productImage = document.querySelector('#left-image')?.src || 
+                                   document.querySelector('#center-image')?.src || 
+                                   document.querySelector('#right-image')?.src || '';
+                
+                // Obtener ID del producto de la URL
+                const productId = getProductIdFromUrl();
+                
+                if (productId) {
+                    // Actualizar atributos del botón para que wishlist-manager.js los use
+                    heartButton.setAttribute('data-product-id', productId);
+                    heartButton.setAttribute('data-product-name', productName);
+                    heartButton.setAttribute('data-product-price', productPrice);
+                    heartButton.setAttribute('data-product-image', productImage);
+                    
+                    // Solo actualizar el estado visual inicial
+                    updateHeartIconState(productId);
+                }
+            }
+            
+            // Función para actualizar el estado del icono de corazón
+            function updateHeartIconState(productId) {
+                const heartButton = document.querySelector('.heart-link');
+                if (!heartButton) return;
+                
+                const heartIcon = heartButton.querySelector('svg');
+                if (!heartIcon) return;
+                
+                // Verificar si está en wishlist
+                const wishlist = getWishlist();
+                const isInWishlist = wishlist.find(item => item.id === productId);
+                
+                if (isInWishlist) {
+                    // 🎯 CORAZÓN ROJO SIMPLE
+                    heartIcon.setAttribute('fill', '#ef4444');
+                } else {
+                    heartIcon.setAttribute('fill', 'none');
+                }
+            }
+            
+            // 🎯 FUNCIONES SIMPLIFICADAS - Solo para estado visual
+            function getWishlist() {
+                const wishlist = localStorage.getItem('cronox-wishlist');
+                return wishlist ? JSON.parse(wishlist) : [];
+            }
+            
+            // 🎯 LISTENER PARA ACTUALIZAR ESTADO VISUAL CUANDO CAMBIE EL WISHLIST
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'cronox-wishlist') {
+                    const productId = getProductIdFromUrl();
+                    if (productId) {
+                        updateHeartIconState(productId);
+                    }
+                }
+            });
+            
+            // 🎯 SOBRESCRIBIR LA FUNCIÓN DEL WISHLIST-MANAGER PARA MANTENER ROJO
+            function overrideWishlistManager() {
+                if (window.wishlistManager) {
+                    window.wishlistManager.updateHeartIcon = function(heartButton, isInWishlist) {
+                        const svg = heartButton.querySelector('svg');
+                        if (svg) {
+                            if (isInWishlist) {
+                                // 🎯 FORZAR ROJO EN INDIVIDUAL-OFFER
+                                svg.setAttribute('fill', '#ef4444');
+                                svg.style.color = '#ef4444';
+                            } else {
+                                svg.setAttribute('fill', 'none');
+                                svg.style.color = '';
+                            }
+                        }
+                    };
+                }
+            }
+            
+            // Intentar sobrescribir inmediatamente y después de un delay
+            overrideWishlistManager();
+            setTimeout(overrideWishlistManager, 100);
+            
+            // Inicializar wishlist después de cargar el producto
+            setTimeout(() => {
+                initializeWishlistForIndividualOffer();
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>

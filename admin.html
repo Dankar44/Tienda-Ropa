@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRONOX - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <script>
+        // Configurar Tailwind CSS para suprimir warnings
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'smoothScroll': 'smoothScroll 20s linear infinite',
+                        'glitch-flicker': 'glitch-flicker 2s 1',
+                    },
+                    keyframes: {
+                        smoothScroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-100%)' }
+                        },
+                        'glitch-flicker': {
+                            '0%, 18%, 22%, 25%, 53%, 57%, 100%': { opacity: '1' },
+                            '20%, 24%, 55%': { opacity: '0.8' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo para aplicar la tipografía gótica/dark */
+        .font-brand {
+            font-family: 'UnifrakturCook', cursive;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        .dashed-button {
+            border: 2px dashed #ffffff;
+            background: transparent;
+        }
+        
+        .dashed-button:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+        
+        /* Estandarizar altura de todas las imágenes de productos en admin */
+        .product-item .h-\[40rem\],
+        .admin-card .h-\[40rem\] {
+            height: 40rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        /* Asegurar que las imágenes tengan la altura correcta */
+        .product-item img,
+        .admin-card img {
+            max-height: 100% !important;
+            max-width: 100% !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            width: auto !important;
+            height: auto !important;
+        }
+        
+        .admin-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .product-item {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        
+        .product-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+    <!-- Top Message Bar -->
+    <div class="bg-black border-b border-gray-800 overflow-hidden">
+        <div id="message-carousel" class="flex" style="animation: smoothScroll 20s linear infinite;">
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">ADMIN PANEL - MANAGE YOUR INVENTORY</p>
+            </div>
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">ADMIN PANEL - MANAGE YOUR INVENTORY</p>
+            </div>
+            <div class="w-full flex-shrink-0 text-center py-1">
+                <p class="font-mono text-sm uppercase tracking-wider text-white">ADMIN PANEL - MANAGE YOUR INVENTORY</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-black/80 backdrop-blur-sm sticky top-0 z-50">
+        <nav class="w-full px-0">
+            <div class="flex items-center justify-between h-16 px-4">
+                <div class="flex items-center">
+                    <!-- Menú móvil -->
+                    <div class="relative">
+                        <button id="menu-toggle" class="p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Abrir menú principal</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Menu Dropdown -->
+                        <div id="menu-dropdown" class="fixed top-0 left-0 h-screen w-[28rem] bg-black text-white shadow-lg z-50 hidden transform -translate-x-full transition-transform duration-500 ease-in-out">
+                            <div class="p-6 h-full flex flex-col">
+                                <div class="flex justify-between items-center mb-8">
+                                    <h3 class="font-mono font-bold text-lg">ADMIN MENU</h3>
+                                    <button id="close-menu" class="text-white hover:text-gray-400">
+                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Navigation Menu -->
+                                <div class="flex-1 overflow-y-auto">
+                                    <nav class="space-y-4">
+                                        <a href="index.html" class="block font-mono font-bold text-lg hover:text-gray-300">BACK TO STORE</a>
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">PRODUCTS MANAGEMENT</a>
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">ORDERS MANAGEMENT</a>
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">STOCK CONTROL</a>
+                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">ANALYTICS</a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Text -->
+                    <div class="ml-6 flex space-x-6">
+                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="PRODUCTS">PRODUCTS</a>
+                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="STOCK">STOCK</a>
+                    </div>
+                </div>
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2">
+                    <h1 class="font-brand text-4xl md:text-5xl tracking-widest">
+                        <a href="index.html">CRONOX</a>
+                    </h1>
+                </div>
+                
+                <!-- Admin Actions -->
+                <div class="flex items-center space-x-3 ml-auto mr-4">
+                    <a href="index.html" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none" title="Back to Store">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </a>
+                    <button id="logout-admin" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none" title="Logout">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="min-h-screen pt-8 pb-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Admin Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-mono font-bold uppercase mb-4">ADMIN PANEL</h1>
+                <p class="text-gray-300 font-mono text-sm uppercase">Manage your inventory and products</p>
+            </div>
+
+            <!-- Add Product Section -->
+            <div class="admin-card rounded-lg p-8 mb-12">
+                <h2 class="text-2xl font-mono font-bold uppercase mb-6">ADD NEW PRODUCT</h2>
+                
+                <form id="product-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Product Name -->
+                        <div>
+                            <label for="product-name" class="block text-sm font-mono uppercase mb-2">Product Name</label>
+                            <input 
+                                type="text" 
+                                id="product-name" 
+                                name="name"
+                                placeholder="Enter product name" 
+                                class="w-full px-4 py-3 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                required
+                            >
+                        </div>
+
+                        <!-- Price -->
+                        <div>
+                            <label for="product-price" class="block text-sm font-mono uppercase mb-2">Price (€)</label>
+                            <input 
+                                type="number" 
+                                id="product-price" 
+                                name="price"
+                                placeholder="0.00" 
+                                step="0.01"
+                                min="0"
+                                class="w-full px-4 py-3 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                required
+                            >
+                        </div>
+
+                        <!-- Garment Type -->
+                        <div>
+                            <label for="garment-type" class="block text-sm font-mono uppercase mb-2">Tipo de prenda</label>
+                            <select 
+                                id="garment-type" 
+                                name="garment_type"
+                                class="w-full px-4 py-3 bg-transparent border border-white text-white focus:outline-none focus:ring-2 focus:ring-white"
+                                required
+                            >
+                                <option value="" class="bg-black text-white">Seleccionar tipo</option>
+                                <option value="hoodie" class="bg-black text-white">Hoodie</option>
+                                <option value="t-shirt" class="bg-black text-white">T-Shirt</option>
+                                <option value="pants" class="bg-black text-white">Pants</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div>
+                        <label for="product-description" class="block text-sm font-mono uppercase mb-2">Product Description</label>
+                        <textarea 
+                            id="product-description" 
+                            name="description"
+                            placeholder="Enter product description..." 
+                            rows="3"
+                            class="w-full px-4 py-3 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white resize-none"
+                        ></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div>
+                        <label for="product-image" class="block text-sm font-mono uppercase mb-2">Product Image</label>
+                        <input 
+                            type="file" 
+                            id="product-image" 
+                            name="image"
+                            accept="image/*"
+                            class="w-full px-4 py-3 bg-transparent border border-white text-white file:bg-transparent file:border-0 file:text-white file:mr-4"
+                            required
+                        >
+                    </div>
+
+                    <!-- Model Image 1 -->
+                    <div>
+                        <label for="model-image-1" class="block text-sm font-mono uppercase mb-2">Imagen modelo 1</label>
+                        <input 
+                            type="file" 
+                            id="model-image-1" 
+                            name="model_image_1"
+                            accept="image/*"
+                            class="w-full px-4 py-3 bg-transparent border border-white text-white file:bg-transparent file:border-0 file:text-white file:mr-4"
+                        >
+                    </div>
+
+                    <!-- Model Image 2 -->
+                    <div>
+                        <label for="model-image-2" class="block text-sm font-mono uppercase mb-2">Imagen modelo 2</label>
+                        <input 
+                            type="file" 
+                            id="model-image-2" 
+                            name="model_image_2"
+                            accept="image/*"
+                            class="w-full px-4 py-3 bg-transparent border border-white text-white file:bg-transparent file:border-0 file:text-white file:mr-4"
+                        >
+                    </div>
+
+                    <!-- Stock by Size -->
+                    <div>
+                        <label class="block text-sm font-mono uppercase mb-4">Stock by Size</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div>
+                                <label for="stock-s" class="block text-xs font-mono uppercase mb-2">Size S</label>
+                                <input 
+                                    type="number" 
+                                    id="stock-s" 
+                                    name="stock_s"
+                                    placeholder="0" 
+                                    min="0"
+                                    class="w-full px-3 py-2 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="stock-m" class="block text-xs font-mono uppercase mb-2">Size M</label>
+                                <input 
+                                    type="number" 
+                                    id="stock-m" 
+                                    name="stock_m"
+                                    placeholder="0" 
+                                    min="0"
+                                    class="w-full px-3 py-2 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="stock-l" class="block text-xs font-mono uppercase mb-2">Size L</label>
+                                <input 
+                                    type="number" 
+                                    id="stock-l" 
+                                    name="stock_l"
+                                    placeholder="0" 
+                                    min="0"
+                                    class="w-full px-3 py-2 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="stock-xl" class="block text-xs font-mono uppercase mb-2">Size XL</label>
+                                <input 
+                                    type="number" 
+                                    id="stock-xl" 
+                                    name="stock_xl"
+                                    placeholder="0" 
+                                    min="0"
+                                    class="w-full px-3 py-2 bg-transparent border border-white text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                    required
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Stock Display -->
+                    <div class="text-center">
+                        <div id="total-stock-display" class="text-white font-mono text-lg font-bold">
+                            Total Stock: 0
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full py-3 px-6 dashed-button font-mono font-bold uppercase text-white hover:bg-white hover:text-black transition-all duration-300">
+                        ADD PRODUCT
+                    </button>
+                </form>
+            </div>
+
+            <!-- Products List Section -->
+            <div class="admin-card rounded-lg p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-mono font-bold uppercase">PRODUCTS INVENTORY</h2>
+                    <button id="refresh-products" class="px-4 py-2 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 font-mono text-sm uppercase">
+                        REFRESH
+                    </button>
+                </div>
+                
+                <!-- Products Grid -->
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Products will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Admin</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Orders</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Analytics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Store</h5>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white text-sm">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">Support</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Help</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold uppercase tracking-wider mb-4">System</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Status</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Logs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 CRONOX ADMIN PANEL. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+
+    <!-- JavaScript para el admin panel -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menu functionality
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuDropdown = document.getElementById('menu-dropdown');
+            const closeMenu = document.getElementById('close-menu');
+
+            // Abrir/cerrar el menú
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (menuDropdown.classList.contains('hidden')) {
+                    menuDropdown.classList.remove('hidden');
+                    setTimeout(() => {
+                        menuDropdown.classList.remove('-translate-x-full');
+                    }, 10);
+                } else {
+                    menuDropdown.classList.add('-translate-x-full');
+                    setTimeout(() => {
+                        menuDropdown.classList.add('hidden');
+                    }, 500);
+                }
+            });
+
+            // Cerrar el menú con el botón X
+            closeMenu.addEventListener('click', function() {
+                menuDropdown.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    menuDropdown.classList.add('hidden');
+                }, 500);
+            });
+
+            // Cerrar el menú al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
+                    if (!menuDropdown.classList.contains('hidden')) {
+                        menuDropdown.classList.add('-translate-x-full');
+                        setTimeout(() => {
+                            menuDropdown.classList.add('hidden');
+                        }, 500);
+                    }
+                }
+            });
+
+            // Prevenir que el clic en el dropdown cierre el menú
+            menuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Logout functionality
+            const logoutButton = document.getElementById('logout-admin');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (window.authManager) {
+                        window.authManager.logout();
+                    } else {
+                        localStorage.removeItem('cronox-token');
+                        localStorage.removeItem('cronox-user');
+                        window.location.href = '/';
+                    }
+                });
+            }
+
+            // Glitch effect on page load
+            function createGlitchEffect() {
+                const glitchElements = document.querySelectorAll('.glitch-text');
+                
+                glitchElements.forEach(element => {
+                    const originalText = element.textContent;
+                    const glitchChars = ['!', '@', '#', '$', '%', '^', '&', '*', '?', ']', '[', '~', '`'];
+                    
+                    // Add glitch animation class
+                    element.classList.add('glitch-animation');
+                    
+                    // Create glitch effect
+                    let glitchInterval = setInterval(() => {
+                        let glitchedText = '';
+                        for (let i = 0; i < originalText.length; i++) {
+                            if (Math.random() < 0.3) {
+                                glitchedText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                            } else {
+                                glitchedText += originalText[i];
+                            }
+                        }
+                        element.textContent = glitchedText;
+                    }, 100);
+                    
+                    // Stop glitch after 2 seconds
+                    setTimeout(() => {
+                        clearInterval(glitchInterval);
+                        element.textContent = originalText;
+                        element.classList.remove('glitch-animation');
+                    }, 2000);
+                });
+            }
+
+            // Run glitch effect on page load
+            createGlitchEffect();
+
+            // Product form functionality
+            const productForm = document.getElementById('product-form');
+            if (productForm) {
+                productForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const submitButton = productForm.querySelector('button[type="submit"]');
+                    const originalText = submitButton.textContent;
+                    
+                    // Show loading state
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'ADDING...';
+                    
+                    try {
+                        const formData = new FormData(productForm);
+                        
+                        // Debug: Log form data
+                        console.log('🔍 Form data received:');
+                        for (let [key, value] of formData.entries()) {
+                            console.log(`${key}: ${value}`);
+                        }
+                        
+                        // Validate form data
+                        const name = formData.get('name').trim();
+                        const description = formData.get('description').trim();
+                        const price = parseFloat(formData.get('price'));
+                        const garment_type = formData.get('garment_type');
+                        const stock_s = parseInt(formData.get('stock_s'));
+                        const stock_m = parseInt(formData.get('stock_m'));
+                        const stock_l = parseInt(formData.get('stock_l'));
+                        const stock_xl = parseInt(formData.get('stock_xl'));
+                        const image = formData.get('image');
+                        const model_image_1 = formData.get('model_image_1');
+                        const model_image_2 = formData.get('model_image_2');
+                        
+                        console.log('🔍 Parsed data:', { name, description, price, stock_s, stock_m, stock_l, stock_xl, image, model_image_1, model_image_2 });
+                        
+                        // Validation
+                        if (!name || !price || price <= 0) {
+                            throw new Error('Please fill in all required fields with valid values');
+                        }
+                        
+                        if (stock_s < 0 || stock_m < 0 || stock_l < 0 || stock_xl < 0) {
+                            throw new Error('Stock quantities cannot be negative');
+                        }
+                        
+                        if (!image || image.size === 0) {
+                            throw new Error('Please select an image');
+                        }
+                        
+                        // Check file size (20MB limit)
+                        const maxSize = 20 * 1024 * 1024; // 20MB
+                        if (image.size > maxSize) {
+                            throw new Error(`Image is too large. Maximum size allowed is 20MB. Your file is ${(image.size / (1024 * 1024)).toFixed(2)}MB`);
+                        }
+                        
+                        // Check model images size if provided
+                        if (model_image_1 && model_image_1.size > 0 && model_image_1.size > maxSize) {
+                            throw new Error(`Model image 1 is too large. Maximum size allowed is 20MB. Your file is ${(model_image_1.size / (1024 * 1024)).toFixed(2)}MB`);
+                        }
+                        
+                        if (model_image_2 && model_image_2.size > 0 && model_image_2.size > maxSize) {
+                            throw new Error(`Model image 2 is too large. Maximum size allowed is 20MB. Your file is ${(model_image_2.size / (1024 * 1024)).toFixed(2)}MB`);
+                        }
+                        
+                        const productData = {
+                            name,
+                            description,
+                            price,
+                            garment_type,
+                            stock_s,
+                            stock_m,
+                            stock_l,
+                            stock_xl,
+                            image,
+                            model_image_1,
+                            model_image_2
+                        };
+
+                        // Create FormData for file upload
+                        const uploadFormData = new FormData();
+                        uploadFormData.append('name', productData.name);
+                        uploadFormData.append('description', productData.description);
+                        uploadFormData.append('price', productData.price);
+                        uploadFormData.append('garment_type', productData.garment_type);
+                        uploadFormData.append('stock_s', productData.stock_s);
+                        uploadFormData.append('stock_m', productData.stock_m);
+                        uploadFormData.append('stock_l', productData.stock_l);
+                        uploadFormData.append('stock_xl', productData.stock_xl);
+                        uploadFormData.append('image', productData.image);
+                        
+                        // Add model images if provided
+                        if (productData.model_image_1 && productData.model_image_1.size > 0) {
+                            uploadFormData.append('model_image_1', productData.model_image_1);
+                        }
+                        if (productData.model_image_2 && productData.model_image_2.size > 0) {
+                            uploadFormData.append('model_image_2', productData.model_image_2);
+                        }
+                        
+                        // API call to add product
+                        console.log('🚀 Sending request to /api/admin/products');
+                        const response = await fetch('/api/admin/products', {
+                            method: 'POST',
+                            body: uploadFormData
+                        });
+                        
+                        console.log('📡 Response status:', response.status);
+                        console.log('📡 Response headers:', response.headers);
+                        
+                        const result = await response.json();
+                        console.log('📡 Response data:', result);
+                        
+                        if (result.success) {
+                            alert('Product added successfully!');
+                            productForm.reset();
+                            calculateTotalStock(); // Reset stock display
+                            loadProducts();
+                        } else {
+                            throw new Error(result.error || 'Error adding product');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error adding product:', error);
+                        alert('Error: ' + error.message);
+                    } finally {
+                        // Reset button state
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                    }
+                });
+            }
+
+            // Refresh products functionality
+            const refreshButton = document.getElementById('refresh-products');
+            if (refreshButton) {
+                refreshButton.addEventListener('click', function() {
+                    loadProducts();
+                });
+            }
+
+            // Load products on page load
+            loadProducts();
+
+            // Add event listeners for stock calculation
+            const stockInputs = ['stock-s', 'stock-m', 'stock-l', 'stock-xl'];
+            stockInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('input', calculateTotalStock);
+                    input.addEventListener('change', calculateTotalStock);
+                }
+            });
+
+            // Calculate initial stock total
+            calculateTotalStock();
+        });
+
+        // Function to calculate total stock
+        function calculateTotalStock() {
+            const stockS = parseInt(document.getElementById('stock-s').value) || 0;
+            const stockM = parseInt(document.getElementById('stock-m').value) || 0;
+            const stockL = parseInt(document.getElementById('stock-l').value) || 0;
+            const stockXl = parseInt(document.getElementById('stock-xl').value) || 0;
+            
+            const totalStock = stockS + stockM + stockL + stockXl;
+            
+            // Update total stock display if element exists
+            const totalStockElement = document.getElementById('total-stock-display');
+            if (totalStockElement) {
+                totalStockElement.textContent = `Total Stock: ${totalStock}`;
+            }
+        }
+
+        // Function to load products
+        async function loadProducts() {
+            const productsGrid = document.getElementById('products-grid');
+            if (!productsGrid) return;
+
+            try {
+                console.log('Loading products...');
+                
+                // Show loading state
+                productsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+                        <p class="text-gray-400 font-mono">Loading products...</p>
+                    </div>
+                `;
+                
+                // API call to fetch products
+                const response = await fetch('/api/admin/products');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const products = result.data;
+                    
+                    if (products.length === 0) {
+                        productsGrid.innerHTML = `
+                            <div class="col-span-full text-center py-12">
+                                <p class="text-gray-400 font-mono mb-4">No products found. Add your first product above.</p>
+                                <p class="text-gray-500 font-mono text-sm">Products will appear here once you start adding them to your inventory.</p>
+                            </div>
+                        `;
+                    } else {
+                        productsGrid.innerHTML = products.map(product => `
+                            <div class="product-item admin-card rounded-lg p-4">
+                                <div class="h-[40rem] bg-white rounded-lg mb-4 flex items-center justify-center">
+                                    ${product.image_url ? 
+                                        `<img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover rounded-lg" style="background-color: white;">` :
+                                        `<div class="text-gray-500 font-mono text-sm">No Image</div>`
+                                    }
+                                </div>
+                                <h3 class="font-mono font-bold text-lg mb-2">${product.name}</h3>
+                                <p class="text-gray-300 font-mono text-sm mb-4">€${product.price}</p>
+                                <div class="space-y-2 mb-4">
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-gray-400">S:</span>
+                                        <span class="text-white">${product.stock_s}</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-gray-400">M:</span>
+                                        <span class="text-white">${product.stock_m}</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-gray-400">L:</span>
+                                        <span class="text-white">${product.stock_l}</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs">
+                                        <span class="text-gray-400">XL:</span>
+                                        <span class="text-white">${product.stock_xl}</span>
+                                    </div>
+                                    <div class="flex justify-between text-xs border-t border-gray-600 pt-2">
+                                        <span class="text-gray-400 font-bold">TOTAL:</span>
+                                        <span class="text-white font-bold">${product.stock_total}</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editProduct(${product.id})" class="flex-1 py-2 px-3 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 font-mono text-xs uppercase">
+                                        EDIT
+                                    </button>
+                                    <button onclick="deleteProduct(${product.id})" class="flex-1 py-2 px-3 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 font-mono text-xs uppercase">
+                                        DELETE
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    throw new Error(result.error || 'Error loading products');
+                }
+                
+            } catch (error) {
+                console.error('Error loading products:', error);
+                productsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-red-400 font-mono">Error loading products. Please try again.</p>
+                        <button onclick="loadProducts()" class="mt-4 px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 font-mono text-sm uppercase">
+                            RETRY
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to edit product
+        async function editProduct(productId) {
+            console.log('Editing product:', productId);
+            
+            try {
+                // Fetch product data
+                const response = await fetch(`/api/admin/products/${productId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const product = result.data;
+                    
+                    // Fill form with product data
+                    document.getElementById('product-name').value = product.name;
+                    document.getElementById('product-description').value = product.description || '';
+                    document.getElementById('product-price').value = product.price;
+                    document.getElementById('garment-type').value = product.garment_type || 't-shirt';
+                    document.getElementById('stock-s').value = product.stock_s;
+                    document.getElementById('stock-m').value = product.stock_m;
+                    document.getElementById('stock-l').value = product.stock_l;
+                    document.getElementById('stock-xl').value = product.stock_xl;
+                    
+                    // Calculate and display total stock
+                    calculateTotalStock();
+                    
+                    // Scroll to form
+                    document.getElementById('product-form').scrollIntoView({ behavior: 'smooth' });
+                    
+                    alert('Product data loaded into form. Modify and submit to update.');
+                } else {
+                    throw new Error(result.error || 'Error loading product');
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                alert('Error loading product: ' + error.message);
+            }
+        }
+
+        // Function to delete product
+        async function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`/api/admin/products/${productId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        alert('Product deleted successfully!');
+                        loadProducts();
+                    } else {
+                        throw new Error(result.error || 'Error deleting product');
+                    }
+                } catch (error) {
+                    console.error('Error deleting product:', error);
+                    alert('Error deleting product: ' + error.message);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
