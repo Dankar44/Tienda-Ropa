@@ -63,6 +63,10 @@ app.get('/wishlist', (req, res) => {
     res.sendFile(path.join(__dirname, 'wishlist.html'));
 });
 
+app.get('/latest-drops', (req, res) => {
+    res.sendFile(path.join(__dirname, 'latest-drops.html'));
+});
+
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'register.html'));
 });

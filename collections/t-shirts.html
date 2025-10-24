@@ -169,47 +169,24 @@
                                         <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
-                                        <input type="text" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
+                                        <input type="text" id="menu-search-input" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
                                     </div>
                                 </div>
                                 
                                 <!-- Navigation Menu -->
                                 <div class="flex-1 overflow-y-auto">
                                     <nav class="space-y-4">
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">ALL OUR SH*T</a>
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">TRACKSUIT SETS</a>
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">HOODIES</a>
-                                        
-                                        <!-- GIRLY SH*T -->
-                                        <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">GIRLY SH*T</a>
-                                            <div class="ml-4 space-y-2">
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- UNISEX SH*T -->
-                                        <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">UNISEX SH*T</a>
-                                            <div class="ml-4 space-y-2">
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
-                                            </div>
-                                        </div>
-                                        
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">COMMUNITY</a>
+                                        <a href="../allproducts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="ALL OUR SH*T">ALL OUR SH*T</a>
+                                        <a href="hoodies.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="HOODIES">HOODIES</a>
+                                        <a href="t-shirts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="T-SHIRTS">T-SHIRTS</a>
+                                        <a href="pants.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="PANTS">PANTS</a>
                                         
                                         <!-- MY ACCOUNT -->
                                         <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">MY ACCOUNT</a>
+                                            <a href="#" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="MY ACCOUNT">MY ACCOUNT</a>
                                             <div class="ml-4 space-y-2">
-                                                <a href="../account.html" class="block font-mono text-sm text-gray-300 hover:text-white">Account</a>
-                                                <a href="../wishlist.html" class="block font-mono text-sm text-gray-300 hover:text-white">Wishlist</a>
+                                                <a href="#" id="account-link" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Account">Account</a>
+                                                <a href="../wishlist.html" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Wishlist">Wishlist</a>
                                             </div>
                                         </div>
                                     </nav>
@@ -220,8 +197,8 @@
                     
                     <!-- Navigation Text -->
                     <div class="ml-6 flex space-x-6">
-                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
-                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
+                        <a href="../allproducts.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
+                        <a href="../latest-drops.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
                     </div>
                 </div>
                 <!-- Logo -->
@@ -247,11 +224,31 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                     </a>
-                    <button class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </button>
+                    <div class="relative">
+                        <button id="cart-toggle" class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Cart Dropdown -->
+                        <div id="cart-dropdown" class="fixed top-0 right-0 h-screen w-[28rem] bg-white text-black shadow-lg z-50 hidden transform translate-x-full transition-transform duration-500 ease-in-out">
+                            <div class="p-6 h-full flex flex-col">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-mono font-bold text-base">Ur Cart (0)</h3>
+                                    <button id="close-cart" class="text-black hover:text-gray-600">
+                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="cart-content flex-1 overflow-y-auto">
+                                    <!-- El contenido del carrito se renderizará aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -572,41 +569,7 @@
         // Initialize menu
         initializeMenu();
 
-        // Glitch effect on page load
-        function createGlitchEffect() {
-            const glitchElements = document.querySelectorAll('.glitch-text');
-            
-            glitchElements.forEach(element => {
-                const originalText = element.textContent;
-                const glitchChars = ['!', '@', '#', '$', '%', '^', '&', '*', '?', ']', '[', '~', '`'];
-                
-                // Add glitch animation class
-                element.classList.add('glitch-animation');
-                
-                // Create glitch effect
-                let glitchInterval = setInterval(() => {
-                    let glitchedText = '';
-                    for (let i = 0; i < originalText.length; i++) {
-                        if (Math.random() < 0.3) {
-                            glitchedText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
-                        } else {
-                            glitchedText += originalText[i];
-                        }
-                    }
-                    element.textContent = glitchedText;
-                }, 100);
-                
-                // Stop glitch after 2 seconds
-                setTimeout(() => {
-                    clearInterval(glitchInterval);
-                    element.textContent = originalText;
-                    element.classList.remove('glitch-animation');
-                }, 2000);
-            });
-        }
-
-        // Run glitch effect on page load
-        createGlitchEffect();
+        // Glitch effects manejados por glitch-effect.js
 
         // Función para cargar productos t-shirt desde la API
         async function loadTshirtProducts() {
@@ -864,6 +827,13 @@
             loadTshirtProducts();
         });
     </script>
+    
+    <!-- Script del carrito global -->
+    <script src="../js/global-cart.js"></script>
+    
+    <!-- Script del efecto glitch -->
+    <script src="../js/glitch-effect.js"></script>
+    <script src="../js/menu-search.js"></script>
 
 </body>
 </html>

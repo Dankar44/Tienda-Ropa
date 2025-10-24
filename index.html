@@ -50,24 +50,20 @@
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
         
-        /* Estilos para el carrusel infinito */
+        /* Estilos para el carrusel con efecto snap */
         .infinite-carousel {
             display: flex;
-            animation: scroll 40s linear infinite;
-            width: calc(200% + 2px); /* Para crear el efecto infinito */
+            transition: transform 5s cubic-bezier(0.16, 1, 0.3, 1); /* Transición muy lenta - 5 segundos */
+            width: auto;
         }
         
         .infinite-carousel:hover {
-            animation-play-state: paused;
+            /* Pausar en hover opcional */
         }
         
-        @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
+        .carousel-container {
+            overflow: hidden;
+            position: relative;
         }
         
         .carousel-container {
@@ -238,6 +234,42 @@
             filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
         }
         
+        /* Estilos para las partículas cayendo */
+        .particle {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            pointer-events: none;
+            user-select: none;
+            will-change: transform, opacity;
+        }
+        
+        @keyframes zigzagFall {
+            0% {
+                transform: translateY(-20px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateY(25vh) translateX(30px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(50vh) translateX(-20px) rotate(180deg);
+            }
+            75% {
+                transform: translateY(75vh) translateX(40px) rotate(270deg);
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) translateX(-10px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
         @media (max-width: 768px) {
             .metallic-text {
                 font-size: 2rem;
@@ -384,24 +416,24 @@
                                         <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
-                                        <input type="text" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
+                                        <input type="text" id="menu-search-input" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
                                     </div>
                                 </div>
                                 
                                 <!-- Navigation Menu -->
                                 <div class="flex-1 overflow-y-auto">
                                     <nav class="space-y-4">
-                                        <a href="allproducts.html" class="block font-mono font-bold text-lg hover:text-gray-300">ALL OUR SH*T</a>
-                                        <a href="collections/hoodies.html" class="block font-mono font-bold text-lg hover:text-gray-300">HOODIES</a>
-                                        <a href="collections/t-shirts.html" class="block font-mono font-bold text-lg hover:text-gray-300">T-SHIRTS</a>
-                                        <a href="collections/pants.html" class="block font-mono font-bold text-lg hover:text-gray-300">PANTS</a>
+                                        <a href="allproducts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="ALL OUR SH*T">ALL OUR SH*T</a>
+                                        <a href="collections/hoodies.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="HOODIES">HOODIES</a>
+                                        <a href="collections/t-shirts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="T-SHIRTS">T-SHIRTS</a>
+                                        <a href="collections/pants.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="PANTS">PANTS</a>
                                         
                                         <!-- MY ACCOUNT -->
                                         <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">MY ACCOUNT</a>
+                                            <a href="#" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="MY ACCOUNT">MY ACCOUNT</a>
                                             <div class="ml-4 space-y-2">
-                                                <a href="#" id="account-link" class="block font-mono text-sm text-gray-300 hover:text-white">Account</a>
-                                                <a href="wishlist.html" class="block font-mono text-sm text-gray-300 hover:text-white">Wishlist</a>
+                                                <a href="#" id="account-link" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Account">Account</a>
+                                                <a href="wishlist.html" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Wishlist">Wishlist</a>
                                             </div>
                                         </div>
                                     </nav>
@@ -413,7 +445,7 @@
                     <!-- Navigation Text -->
                     <div class="ml-6 flex space-x-6">
                         <a href="allproducts.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
-                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
+                        <a href="latest-drops.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
                     </div>
                 </div>
                 <!-- Logo -->
@@ -481,8 +513,11 @@
 
 
         <!-- Sección "LOVED BY THE COMMUNITY" -->
-        <section class="py-16 sm:py-24 bg-black">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section class="py-16 sm:py-24 bg-black relative overflow-hidden">
+            <!-- Contenedor de partículas cayendo -->
+            <div id="particles-container" class="absolute inset-0 pointer-events-none z-0"></div>
+            
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <h3 class="metallic-text mb-8 text-center">LOVED BY THE COMMUNITY</h3>
                 <div class="carousel-container">
                     <div class="infinite-carousel" id="community-products">
@@ -551,6 +586,9 @@
     <script src="/js/wishlist-manager.js"></script>
     <script src="/js/auth-sync.js"></script>
     <script src="/js/simple-wishlist-sync.js"></script>
+    <script src="/js/global-cart.js"></script>
+    <script src="/js/glitch-effect.js"></script>
+    <script src="/js/menu-search.js"></script>
 
     <!-- JavaScript para el menú y carrito -->
     <script>
@@ -600,81 +638,10 @@
                 e.stopPropagation();
             });
 
-            // Cart toggle functionality
-            const cartToggle = document.getElementById('cart-toggle');
-            const cartDropdown = document.getElementById('cart-dropdown');
-            const closeCart = document.getElementById('close-cart');
-
-            cartToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                // Cargar el carrito antes de mostrarlo
-                loadCart();
-                cartDropdown.classList.remove('hidden');
-                setTimeout(() => {
-                    cartDropdown.classList.remove('translate-x-full');
-                }, 10);
-            });
-
-            closeCart.addEventListener('click', function(e) {
-                e.stopPropagation();
-                cartDropdown.classList.add('translate-x-full');
-                setTimeout(() => {
-                    cartDropdown.classList.add('hidden');
-                }, 500);
-            });
-
-            // Close cart when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!cartDropdown.contains(e.target) && !cartToggle.contains(e.target)) {
-                    if (!cartDropdown.classList.contains('hidden')) {
-                        cartDropdown.classList.add('translate-x-full');
-                        setTimeout(() => {
-                            cartDropdown.classList.add('hidden');
-                        }, 500);
-                    }
-                }
-            });
-
-            // Prevenir que el clic en el dropdown del carrito cierre el carrito
-            cartDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-
-            // Glitch effect on page load
-            function createGlitchEffect() {
-                const glitchElements = document.querySelectorAll('.glitch-text');
-                
-                glitchElements.forEach(element => {
-                    const originalText = element.textContent;
-                    const glitchChars = ['!', '@', '#', '$', '%', '^', '&', '*', '?', ']', '[', '~', '`'];
-                    
-                    // Add glitch animation class
-                    element.classList.add('glitch-animation');
-                    
-                    // Create glitch effect
-                    let glitchInterval = setInterval(() => {
-                        let glitchedText = '';
-                        for (let i = 0; i < originalText.length; i++) {
-                            if (Math.random() < 0.3) {
-                                glitchedText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
-                            } else {
-                                glitchedText += originalText[i];
-                            }
-                        }
-                        element.textContent = glitchedText;
-                    }, 100);
-                    
-                    // Stop glitch after 2 seconds
-                    setTimeout(() => {
-                        clearInterval(glitchInterval);
-                        element.textContent = originalText;
-                        element.classList.remove('glitch-animation');
-                    }, 2000);
-                });
-            }
-
-            // Run glitch effect on page load
-            createGlitchEffect();
+            // Cart toggle functionality - Manejado por global-cart.js
+            // Funcionalidad de búsqueda - Manejado por menu-search.js
+            
+            // Glitch effects manejados por glitch-effect.js
 
             // Wishlist functionality
             function getWishlist() {
@@ -700,7 +667,7 @@
                     });
                     saveWishlist(wishlist);
                     updateHeartIcon(productId, true);
-                    showNotification('Producto agregado al wishlist');
+                    showNotification('Producto removido del wishlist');
                 } else {
                     removeFromWishlist(productId);
                 }
@@ -711,7 +678,7 @@
                 const filteredWishlist = wishlist.filter(item => item.id !== productId);
                 saveWishlist(filteredWishlist);
                 updateHeartIcon(productId, false);
-                showNotification('Producto removido del wishlist');
+                showNotification('Producto agregado al wishlist');
             }
 
             function updateHeartIcon(productId, isInWishlist) {
@@ -970,6 +937,79 @@
                     setupWishlistListeners();
                     console.log('✅ Wishlist reinicializado para', document.querySelectorAll('.heart-link').length, 'botones');
                 }, 200);
+                
+                // Iniciar el carrusel con efecto snap
+                startSnapCarousel(carousel, products.length);
+            }
+            
+            // 🎬 FUNCIÓN PARA CARRUSEL CON EFECTO SNAP Y PAUSA
+            function startSnapCarousel(carousel, totalProducts) {
+                if (!carousel || totalProducts === 0) return;
+                
+                let currentIndex = 0;
+                const productItems = carousel.querySelectorAll('.product-item');
+                
+                if (productItems.length === 0) return;
+                
+                // Calcular el ancho de un producto
+                const getProductWidth = () => {
+                    return productItems[0].offsetWidth;
+                };
+                
+                function moveToNext() {
+                    currentIndex++;
+                    
+                    // Si llegamos al final de los productos originales, resetear sin animación
+                    if (currentIndex >= totalProducts) {
+                        // Mover al siguiente con animación
+                        const productWidth = getProductWidth();
+                        carousel.style.transform = `translateX(-${currentIndex * productWidth}px)`;
+                        
+                        // Después de la animación, resetear a la posición 0 sin transición
+                        setTimeout(() => {
+                            carousel.style.transition = 'none';
+                            currentIndex = 0;
+                            carousel.style.transform = `translateX(0)`;
+                            
+                            // Restaurar la transición después de un frame
+                            setTimeout(() => {
+                                carousel.style.transition = 'transform 5s cubic-bezier(0.16, 1, 0.3, 1)';
+                            }, 50);
+                        }, 5000); // Duración de la transición (5s)
+                    } else {
+                        // Movimiento normal con animación
+                        const productWidth = getProductWidth();
+                        carousel.style.transform = `translateX(-${currentIndex * productWidth}px)`;
+                    }
+                }
+                
+                // Iniciar el ciclo automático
+                function startAutoPlay() {
+                    return setInterval(() => {
+                        moveToNext();
+                    }, 6500); // Cambiar cada 6.5 segundos (1.5 segundos de pausa + 5s de transición)
+                }
+                
+                let autoPlayInterval = startAutoPlay();
+                
+                // Pausar en hover (opcional)
+                carousel.addEventListener('mouseenter', () => {
+                    clearInterval(autoPlayInterval);
+                });
+                
+                carousel.addEventListener('mouseleave', () => {
+                    autoPlayInterval = startAutoPlay();
+                });
+                
+                // Ajustar en resize
+                window.addEventListener('resize', () => {
+                    const productWidth = getProductWidth();
+                    carousel.style.transition = 'none';
+                    carousel.style.transform = `translateX(-${currentIndex * productWidth}px)`;
+                    setTimeout(() => {
+                        carousel.style.transition = 'transform 5s cubic-bezier(0.16, 1, 0.3, 1)';
+                    }, 50);
+                });
             }
 
             // Función para crear elemento de producto del carrusel
@@ -1047,6 +1087,87 @@
             initializeHeartIcons();
             setupWishlistListeners();
             }, 500);
+
+            // 🎨 SISTEMA DE PARTÍCULAS CAYENDO CON ZIGZAG
+            function createFallingParticles() {
+                const particlesContainer = document.getElementById('particles-container');
+                if (!particlesContainer) return;
+                
+                // Símbolos sin relleno (outline) y estrellas con ambas versiones
+                const symbols = [
+                    '@', '♡', '#', '◇', '◆', '△', '▽', '□', '○', 
+                    '☆', '★', '☆', '★', '✧', '✦', '◈', '◊', '⬡', '⬢'
+                ];
+                
+                // Solo colores blancos y grises
+                const colors = ['#ffffff', '#f5f5f5', '#e8e8e8', '#d0d0d0', '#c0c0c0', '#b0b0b0'];
+                
+                function createParticle() {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    // Símbolo aleatorio
+                    const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    particle.textContent = symbol;
+                    
+                    // Color aleatorio (solo blancos/grises)
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.color = color;
+                    
+                    // Posición horizontal aleatoria
+                    const startX = Math.random() * 100;
+                    particle.style.left = `${startX}%`;
+                    
+                    // Tamaño aleatorio más variado (0.8rem - 3rem)
+                    const size = 0.8 + Math.random() * 2.2;
+                    particle.style.fontSize = `${size}rem`;
+                    
+                    // Duración aleatoria (entre 8 y 15 segundos)
+                    const duration = 8 + Math.random() * 7;
+                    
+                    // Delay aleatorio para inicio
+                    const delay = Math.random() * 2;
+                    
+                    // Variación en el zigzag (cada partícula tiene un patrón único)
+                    const zigzagIntensity = 20 + Math.random() * 40;
+                    const zigzagDirection = Math.random() > 0.5 ? 1 : -1;
+                    
+                    // Aplicar animación personalizada con keyframes inline
+                    particle.style.animation = `zigzagFall ${duration}s ease-in-out ${delay}s infinite`;
+                    
+                    // Agregar variación en el movimiento horizontal usando CSS variables
+                    particle.style.setProperty('--zigzag-x', `${zigzagIntensity * zigzagDirection}px`);
+                    
+                    particlesContainer.appendChild(particle);
+                    
+                    // Remover y recrear la partícula después de su ciclo
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.remove();
+                        }
+                    }, (duration + delay) * 1000);
+                }
+                
+                // Crear MUCHAS más partículas iniciales (entre 30 y 45)
+                const initialParticles = 30 + Math.floor(Math.random() * 15);
+                for (let i = 0; i < initialParticles; i++) {
+                    setTimeout(() => createParticle(), i * 200);
+                }
+                
+                // Crear nuevas partículas continuamente con intervalos más cortos (más partículas)
+                function scheduleNextParticle() {
+                    const delay = 400 + Math.random() * 800; // Entre 0.4 y 1.2 segundos (más rápido)
+                    setTimeout(() => {
+                        createParticle();
+                        scheduleNextParticle();
+                    }, delay);
+                }
+                
+                scheduleNextParticle();
+            }
+            
+            // Iniciar el sistema de partículas cuando la página cargue
+            createFallingParticles();
 
             // Función para verificar si el usuario está autenticado
             function isUserAuthenticated() {
@@ -1337,9 +1458,9 @@
                     });
                     showNotification(`${productName} (Talla: ${size}, Cantidad: ${quantity}) añadido al carrito`);
                     
-                    // Actualizar el carrito
+                    // Actualizar el carrito usando global-cart.js
                     console.log('🔄 Actualizando carrito...');
-                    await loadCart();
+                    await window.globalCartManager.loadCart();
                     console.log('✅ Carrito actualizado correctamente');
                 } else {
                     console.error('❌ ERROR AL AÑADIR AL CARRITO');
@@ -1381,258 +1502,10 @@
             }, 3000);
         }
 
-        // Variable global para almacenar el carrito
-        let cartData = [];
-
-        // Función para cargar el carrito desde la API
-        async function loadCart() {
-            console.log('🔄 Cargando carrito desde la base de datos...');
-            
-            try {
-                const token = localStorage.getItem('cronox-token');
-                if (!token) {
-                    console.log('❌ No hay token de autenticación, carrito vacío');
-                    cartData = [];
-                    renderCart();
-                    updateCartCounter();
-                    return;
-                }
-                
-                console.log('🔑 Token encontrado, solicitando carrito...');
-                
-                const response = await fetch('/api/cart', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
-                console.log('📡 Respuesta del servidor para carrito:', {
-                    status: response.status,
-                    statusText: response.statusText
-                });
-                
-                const result = await response.json();
-                console.log('📋 Resultado de la carga del carrito:', result);
-                
-                if (result.success) {
-                    cartData = result.cart;
-                    console.log('✅ CARRITO CARGADO EXITOSAMENTE');
-                    console.log('🛒 Items en el carrito:', cartData.length);
-                    console.log('📦 Detalles del carrito:', cartData);
-                    renderCart();
-                    updateCartCounter();
-                } else {
-                    console.error('❌ ERROR CARGANDO CARRITO:', result.message);
-                    cartData = [];
-                    renderCart();
-                    updateCartCounter();
-                }
-                
-            } catch (error) {
-                console.error('💥 ERROR CRÍTICO CARGANDO CARRITO:', error);
-                cartData = [];
-                renderCart();
-                updateCartCounter();
-            }
-        }
-
-        // Función para actualizar contador del carrito
-        function updateCartCounter() {
-            const totalItems = cartData.reduce((sum, item) => sum + item.quantity, 0);
-            
-            // Buscar y actualizar contador si existe
-            const cartCounter = document.querySelector('.cart-counter');
-            if (cartCounter) {
-                cartCounter.textContent = totalItems;
-                cartCounter.style.display = totalItems > 0 ? 'block' : 'none';
-            }
-            
-            // Actualizar el título del carrito
-            const cartTitle = document.querySelector('#cart-dropdown h3');
-            if (cartTitle) {
-                cartTitle.textContent = `Ur Cart (${totalItems})`;
-            }
-        }
-
-        // Función para renderizar el carrito
-        function renderCart() {
-            console.log('🎨 Renderizando carrito...');
-            console.log('📊 Datos del carrito para renderizar:', cartData);
-            
-            const cartContent = document.querySelector('#cart-dropdown .cart-content');
-            
-            if (!cartContent) {
-                console.error('❌ No se encontró el elemento del carrito');
-                return;
-            }
-            
-            if (cartData.length === 0) {
-                console.log('🈳 Carrito vacío, mostrando mensaje de vacío');
-                cartContent.innerHTML = `
-                    <div class="flex flex-col items-center justify-center h-full text-center">
-                        <p class="font-mono text-sm mb-4">empty :(</p>
-                        <button class="bg-black text-white px-4 py-2 font-mono font-bold uppercase border-2 border-dashed border-white hover:bg-white hover:text-black transition-all duration-300 text-xs">
-                            ADD SOME CHAOS
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            
-            console.log('🛒 Renderizando', cartData.length, 'items del carrito');
-            
-            let cartHTML = '';
-            let total = 0;
-            
-            cartData.forEach((item, index) => {
-                const itemTotal = parseFloat(item.price) * item.quantity;
-                total += itemTotal;
-                
-                cartHTML += `
-                    <div class="flex items-center space-x-4 p-4 border-b border-gray-200">
-                        <div class="w-16 h-16 bg-gray-100 rounded">
-                            <img src="${item.image_url}" alt="${item.name}" class="w-full h-full object-cover rounded" onerror="this.src='/uploads/products/product-1761122999129-559609427.png'">
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-mono font-bold text-sm">${item.name}</h4>
-                            <p class="text-xs text-gray-600">Size: ${item.type}</p>
-                            <p class="text-sm font-bold">€${item.price}</p>
-                            <button class="text-xs underline text-gray-600 hover:text-black remove-item" data-id="${item.id}">Remove</button>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <button class="w-6 h-6 bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm quantity-decrease" data-id="${item.id}">-</button>
-                            <span class="w-8 text-center text-sm quantity-display" data-id="${item.id}">${item.quantity}</span>
-                            <button class="w-6 h-6 bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm quantity-increase" data-id="${item.id}">+</button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            cartHTML += `
-                <div class="p-4 border-t border-gray-200">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="font-mono font-bold">Subtotal: €${total.toFixed(2).replace('.', ',')}</span>
-                    </div>
-                    <p class="text-xs text-gray-600 mb-4">Shipping & taxes calculated at checkout</p>
-                    <div class="space-y-2">
-                        <button class="w-full bg-white border-2 border-dashed border-black text-black py-2 px-4 font-mono text-sm hover:bg-gray-50 transition-colors">
-                            FIND YOUR FAVES
-                        </button>
-                        <button class="w-full bg-black text-white py-3 px-4 font-mono font-bold hover:bg-gray-800 transition-colors">
-                            CHECKOUT
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            cartContent.innerHTML = cartHTML;
-            console.log('✅ Carrito renderizado correctamente');
-            console.log('💰 Total calculado:', total);
-            
-            // Añadir event listeners para los botones
-            setupCartEventListeners();
-            console.log('🔗 Event listeners del carrito configurados');
-        }
-
-        // Función para configurar los event listeners del carrito
-        function setupCartEventListeners() {
-            // Botones de eliminar
-            document.querySelectorAll('.remove-item').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    await removeFromCart(id);
-                });
-            });
-            
-            // Botones de cantidad
-            document.querySelectorAll('.quantity-decrease').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    await updateQuantity(id, -1);
-                });
-            });
-            
-            document.querySelectorAll('.quantity-increase').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    await updateQuantity(id, 1);
-                });
-            });
-        }
-
-        // Función para eliminar un item del carrito
-        async function removeFromCart(id) {
-            try {
-                const token = localStorage.getItem('cronox-token');
-                if (!token) return;
-                
-                const response = await fetch(`/api/cart/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    await loadCart();
-                } else {
-                    console.error('Error eliminando del carrito:', result.message);
-                }
-                
-            } catch (error) {
-                console.error('Error eliminando del carrito:', error);
-            }
-        }
-
-        // Función para actualizar la cantidad de un item
-        async function updateQuantity(id, change) {
-            try {
-                const token = localStorage.getItem('cronox-token');
-                if (!token) return;
-                
-                // Encontrar el item actual
-                const item = cartData.find(item => item.id == id);
-                if (!item) return;
-                
-                const newQuantity = item.quantity + change;
-                
-                if (newQuantity <= 0) {
-                    // Eliminar el item si la cantidad es 0 o menor
-                    await removeFromCart(id);
-                    return;
-                }
-                
-                const response = await fetch(`/api/cart/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        quantity: newQuantity
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    await loadCart();
-                } else {
-                    console.error('Error actualizando cantidad:', result.message);
-                }
-                
-            } catch (error) {
-                console.error('Error actualizando cantidad:', error);
-            }
-        }
+        // Funciones del carrito manejadas por global-cart.js
 
         // Configurar el dropdown de talla y cantidad
         setupSizeQuantityDropdown();
-        
-        // Inicializar el carrito
-        loadCart();
         });
     </script>
 

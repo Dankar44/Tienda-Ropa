@@ -54,47 +54,24 @@
                                         <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
-                                        <input type="text" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
+                                        <input type="text" id="menu-search-input" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
                                     </div>
                                 </div>
                                 
                                 <!-- Navigation Menu -->
                                 <div class="flex-1 overflow-y-auto">
                                     <nav class="space-y-4">
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">ALL OUR SH*T</a>
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">TRACKSUIT SETS</a>
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">HOODIES</a>
-                                        
-                                        <!-- GIRLY SH*T -->
-                                        <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">GIRLY SH*T</a>
-                                            <div class="ml-4 space-y-2">
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- UNISEX SH*T -->
-                                        <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">UNISEX SH*T</a>
-                                            <div class="ml-4 space-y-2">
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
-                                            </div>
-                                        </div>
-                                        
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">COMMUNITY</a>
+                                        <a href="allproducts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="ALL OUR SH*T">ALL OUR SH*T</a>
+                                        <a href="collections/hoodies.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="HOODIES">HOODIES</a>
+                                        <a href="collections/t-shirts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="T-SHIRTS">T-SHIRTS</a>
+                                        <a href="collections/pants.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="PANTS">PANTS</a>
                                         
                                         <!-- MY ACCOUNT -->
                                         <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">MY ACCOUNT</a>
+                                            <a href="#" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="MY ACCOUNT">MY ACCOUNT</a>
                                             <div class="ml-4 space-y-2">
-                                                <a href="account.html" class="block font-mono text-sm text-gray-300 hover:text-white">Account</a>
-                                                <a href="wishlist.html" class="block font-mono text-sm text-gray-300 hover:text-white">Wishlist</a>
+                                                <a href="#" id="account-link" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Account">Account</a>
+                                                <a href="wishlist.html" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Wishlist">Wishlist</a>
                                             </div>
                                         </div>
                                     </nav>
@@ -106,7 +83,7 @@
                     <!-- Navigation Text -->
                     <div class="ml-6 flex space-x-6">
                         <a href="allproducts.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
-                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
+                        <a href="latest-drops.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
                     </div>
                 </div>
                 <!-- Logo -->
@@ -147,13 +124,8 @@
                                     </button>
                                 </div>
                                 
-                                <div class="flex-1 flex items-center justify-center">
-                                    <div class="text-center">
-                                        <p class="text-sm mb-4">empty :(</p>
-                                        <button class="px-4 py-2 bg-black text-white text-xs font-mono uppercase hover:bg-gray-800 transition-colors">
-                                            ADD SOME CHAOS
-                                        </button>
-                                    </div>
+                                <div class="cart-content flex-1 overflow-y-auto">
+                                    <!-- El contenido del carrito se renderizará aquí -->
                                 </div>
                             </div>
                         </div>
@@ -360,41 +332,7 @@
                 e.stopPropagation();
             });
 
-            // Glitch effect on page load
-            function createGlitchEffect() {
-                const glitchElements = document.querySelectorAll('.glitch-text');
-                
-                glitchElements.forEach(element => {
-                    const originalText = element.textContent;
-                    const glitchChars = ['!', '@', '#', '$', '%', '^', '&', '*', '?', ']', '[', '~', '`'];
-                    
-                    // Add glitch animation class
-                    element.classList.add('glitch-animation');
-                    
-                    // Create glitch effect
-                    let glitchInterval = setInterval(() => {
-                        let glitchedText = '';
-                        for (let i = 0; i < originalText.length; i++) {
-                            if (Math.random() < 0.3) {
-                                glitchedText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
-                            } else {
-                                glitchedText += originalText[i];
-                            }
-                        }
-                        element.textContent = glitchedText;
-                    }, 100);
-                    
-                    // Stop glitch after 2 seconds
-                    setTimeout(() => {
-                        clearInterval(glitchInterval);
-                        element.textContent = originalText;
-                        element.classList.remove('glitch-animation');
-                    }, 2000);
-                });
-            }
-
-            // Run glitch effect on page load
-            createGlitchEffect();
+            // Glitch effects manejados por glitch-effect.js
 
             // Wishlist functionality
             function getWishlist() {
@@ -632,31 +570,42 @@
                 }
                 
                 productDiv.innerHTML = `
-                    <a href="individual-offer.html?id=${product.id}" class="block">
-                        <div class="relative bg-white">
-                            <img src="${imageUrl}" alt="${product.name}" class="w-full h-[32rem] object-contain">
-                            <button class="heart-link absolute top-2 right-2 p-2 text-black hover:text-gray-600 transition-colors" 
-                                    data-product-id="${product.id}"
-                                    data-product-name="${product.name}"
-                                    data-product-price="€${price}"
-                                    data-product-image="${imageUrl}">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="p-4 bg-black text-center">
-                            <h3 class="font-mono text-sm uppercase tracking-wider text-white mb-2">${product.name}</h3>
-                            <p class="font-mono text-sm font-semibold tracking-wider text-gray-300">€${price}</p>
-                            <!-- 🎯 INDICADOR DE FAVOURITES (OCULTO) -->
-                            <div class="hidden mt-2 flex items-center justify-center space-x-1">
-                                <svg class="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                                <span class="font-mono text-xs text-gray-400">${product.favourites || 0} faves</span>
+                    <div class="relative product-item">
+                        <a href="individual-offer.html?id=${product.id}" class="block">
+                            <div class="relative bg-white">
+                                <img src="${imageUrl}" alt="${product.name}" class="w-full h-[32rem] object-contain">
+                                <button class="heart-link absolute top-2 right-2 p-2 text-black hover:text-gray-600 transition-colors" 
+                                        data-product-id="${product.id}"
+                                        data-product-name="${product.name}"
+                                        data-product-price="€${price}"
+                                        data-product-image="${imageUrl}">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </button>
+                                <button class="add-to-cart-btn absolute bottom-2 right-2 p-2 text-black hover:text-gray-600 transition-colors" 
+                                        data-product-id="${product.id}"
+                                        data-product-name="${product.name}"
+                                        data-product-price="€${price}"
+                                        data-product-image="${imageUrl}">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </button>
                             </div>
-                        </div>
-                    </a>
+                            <div class="p-4 bg-black text-center">
+                                <h3 class="font-mono text-sm uppercase tracking-wider text-white mb-2">${product.name}</h3>
+                                <p class="font-mono text-sm font-semibold tracking-wider text-gray-300">€${price}</p>
+                                <!-- 🎯 INDICADOR DE FAVOURITES (OCULTO) -->
+                                <div class="hidden mt-2 flex items-center justify-center space-x-1">
+                                    <svg class="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                    <span class="font-mono text-xs text-gray-400">${product.favourites || 0} faves</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 `;
                 
                 return productDiv;
@@ -697,8 +646,19 @@
                 performSearch(query);
             });
 
-            // Cargar productos por defecto al cargar la página
-            showDefaultProducts();
+            // Leer parámetro de búsqueda de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('q');
+            
+            if (searchQuery) {
+                // Si hay un término de búsqueda en la URL
+                console.log('🔍 Búsqueda desde URL:', searchQuery);
+                searchInput.value = searchQuery; // Poner el término en el input
+                performSearch(searchQuery); // Ejecutar la búsqueda automáticamente
+            } else {
+                // Cargar productos por defecto si no hay búsqueda
+                showDefaultProducts();
+            }
 
             // 🎯 FUNCIÓN PARA ENVIAR DATOS A LA BASE DE DATOS
             async function sendToDatabase(productId, productName, productPrice) {
@@ -760,12 +720,224 @@
                     console.error('❌ Error de red enviando a base de datos:', error);
                 }
             }
+
+            // ==================== FUNCIONALIDAD DE AÑADIR AL CARRITO ====================
+            
+            // Función para crear el dropdown de talla y cantidad
+            function createSizeQuantityDropdown(productId, productName, productPrice, productImage) {
+                const dropdown = document.createElement('div');
+                dropdown.className = 'size-quantity-dropdown absolute top-0 left-0 w-full h-full bg-black bg-opacity-90 z-50';
+                dropdown.innerHTML = `
+                    <div class="bg-white absolute top-0 left-0 w-full h-full flex flex-col" style="height: calc(100% - 83px);">
+                        <div class="flex justify-between items-center p-4 border-b border-gray-200">
+                            <h3 class="text-base font-bold text-black">Seleccionar Talla y Cantidad</h3>
+                            <button class="close-dropdown text-gray-500 hover:text-gray-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="flex-1 p-4">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Talla:</label>
+                                <select id="size-select" class="w-full p-3 text-base text-black border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent">
+                                    <option value="">Seleccionar talla</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Cantidad:</label>
+                                <div class="flex items-center space-x-3">
+                                    <button class="quantity-btn minus bg-gray-200 hover:bg-gray-300 text-black w-8 h-8 flex items-center justify-center text-base">-</button>
+                                    <input type="number" id="quantity-input" value="1" min="1" max="10" class="w-16 text-center text-base text-black border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent">
+                                    <button class="quantity-btn plus bg-gray-200 hover:bg-gray-300 text-black w-8 h-8 flex items-center justify-center text-base">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border-t border-gray-200">
+                            <button id="add-to-cart-confirm" class="w-full bg-black text-white py-3 px-4 text-base hover:bg-gray-800 transition-colors font-bold">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                return dropdown;
+            }
+
+            // Función para configurar los eventos del dropdown
+            function setupDropdownEvents(dropdown, productId, productName, productPrice, productImage) {
+                const closeBtn = dropdown.querySelector('.close-dropdown');
+                const quantityInput = dropdown.querySelector('#quantity-input');
+                const minusBtn = dropdown.querySelector('.quantity-btn.minus');
+                const plusBtn = dropdown.querySelector('.quantity-btn.plus');
+                const addToCartBtn = dropdown.querySelector('#add-to-cart-confirm');
+                
+                // Cerrar dropdown
+                closeBtn.addEventListener('click', () => {
+                    dropdown.remove();
+                });
+                
+                // Cerrar al hacer clic fuera
+                dropdown.addEventListener('click', (e) => {
+                    if (e.target === dropdown) {
+                        dropdown.remove();
+                    }
+                });
+                
+                // Manejar cantidad
+                minusBtn.addEventListener('click', () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+                
+                plusBtn.addEventListener('click', () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue < 10) {
+                        quantityInput.value = currentValue + 1;
+                    }
+                });
+                
+                // Añadir al carrito
+                addToCartBtn.addEventListener('click', () => {
+                    const sizeSelect = dropdown.querySelector('#size-select');
+                    const selectedSize = sizeSelect.value;
+                    const quantity = parseInt(quantityInput.value);
+                    
+                    if (!selectedSize) {
+                        alert('Por favor, selecciona una talla');
+                        return;
+                    }
+                    
+                    // Llamar a la función addToCart con los nuevos parámetros
+                    addToCartWithSizeQuantity(productId, productName, productPrice, productImage, selectedSize, quantity);
+                    
+                    // Cerrar el dropdown
+                    dropdown.remove();
+                });
+            }
+
+            // Función para añadir al carrito con talla y cantidad
+            async function addToCartWithSizeQuantity(productId, productName, productPrice, productImage, size, quantity) {
+                console.log('🛒 Iniciando proceso de añadir al carrito desde buscar.html...');
+                
+                try {
+                    const token = localStorage.getItem('cronox-token');
+                    if (!token) {
+                        console.error('❌ No hay token de autenticación');
+                        showNotification('Debes iniciar sesión para añadir productos al carrito');
+                        return;
+                    }
+                    
+                    // Validar y convertir datos
+                    const productIdInt = parseInt(productId);
+                    const quantityInt = parseInt(quantity);
+                    
+                    // Validar que los datos son correctos
+                    if (isNaN(productIdInt) || productIdInt <= 0) {
+                        console.error('❌ Product ID inválido:', productId);
+                        showNotification('Error: ID de producto inválido');
+                        return;
+                    }
+                    
+                    if (!['S', 'M', 'L', 'XL'].includes(size)) {
+                        console.error('❌ Talla inválida:', size);
+                        showNotification('Error: Talla inválida');
+                        return;
+                    }
+                    
+                    if (isNaN(quantityInt) || quantityInt <= 0) {
+                        console.error('❌ Cantidad inválida:', quantity);
+                        showNotification('Error: Cantidad inválida');
+                        return;
+                    }
+                    
+                    const requestData = {
+                        product_id: productIdInt,
+                        type: size,
+                        quantity: quantityInt
+                    };
+                    
+                    console.log('📤 Enviando al servidor:', requestData);
+                    
+                    const response = await fetch('/api/cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        console.log('✅ PRODUCTO AÑADIDO EXITOSAMENTE AL CARRITO');
+                        showNotification(`${productName} (Talla: ${size}, Cantidad: ${quantity}) añadido al carrito`);
+                        
+                        // Actualizar el carrito usando global-cart.js
+                        if (window.globalCartManager) {
+                            await window.globalCartManager.loadCart();
+                        }
+                    } else {
+                        console.error('❌ ERROR AL AÑADIR AL CARRITO:', result);
+                        const errorMessage = result.message || `Error del servidor (${response.status})`;
+                        showNotification('Error añadiendo al carrito: ' + errorMessage);
+                    }
+                    
+                } catch (error) {
+                    console.error('💥 ERROR CRÍTICO AL AÑADIR AL CARRITO:', error);
+                    showNotification('Error añadiendo al carrito');
+                }
+            }
+
+            // Event delegation para el botón "+"
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.add-to-cart-btn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const button = e.target.closest('.add-to-cart-btn');
+                    const productId = button.dataset.productId;
+                    const productName = button.dataset.productName;
+                    const productPrice = button.dataset.productPrice;
+                    const productImage = button.dataset.productImage;
+                    
+                    console.log('🛒 Botón "+" pulsado en buscar.html:', { productId, productName, productPrice, productImage });
+                    
+                    // Crear y mostrar el dropdown
+                    const dropdown = createSizeQuantityDropdown(productId, productName, productPrice, productImage);
+                    const productItem = button.closest('.product-item');
+                    if (productItem) {
+                        productItem.style.position = 'relative';
+                        productItem.appendChild(dropdown);
+                        
+                        // Configurar eventos del dropdown
+                        setupDropdownEvents(dropdown, productId, productName, productPrice, productImage);
+                    }
+                }
+            });
         });
     </script>
 
     <!-- Scripts de wishlist y autenticación -->
     <script src="js/wishlist-manager.js"></script>
     <script src="js/auth-sync.js"></script>
+    
+    <!-- Script del carrito global -->
+    <script src="js/global-cart.js"></script>
+    
+    <!-- Script del efecto glitch -->
+    <script src="js/glitch-effect.js"></script>
+    <script src="js/menu-search.js"></script>
 
 </body>
 </html>

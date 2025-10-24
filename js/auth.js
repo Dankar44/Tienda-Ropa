@@ -96,6 +96,11 @@ class AuthManager {
         // Limpiar wishlist al cerrar sesión
         localStorage.removeItem('cronox-wishlist');
         
+        // Limpiar carrito al cerrar sesión
+        if (window.globalCartManager) {
+            window.globalCartManager.clearCart();
+        }
+        
         // Redirect to index after logout
         window.location.href = '/';
     }

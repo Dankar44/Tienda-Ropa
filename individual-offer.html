@@ -255,47 +255,24 @@
                                         <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
-                                        <input type="text" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
+                                        <input type="text" id="menu-search-input" placeholder="what do u wanna search for ?" class="bg-transparent border-none text-white placeholder-gray-400 focus:outline-none w-full font-mono">
                                     </div>
                                 </div>
                                 
                                 <!-- Navigation Menu -->
                                 <div class="flex-1 overflow-y-auto">
                                     <nav class="space-y-4">
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">ALL OUR SH*T</a>
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">TRACKSUIT SETS</a>
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">HOODIES</a>
-                                        
-                                        <!-- GIRLY SH*T -->
-                                        <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">GIRLY SH*T</a>
-                                            <div class="ml-4 space-y-2">
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- UNISEX SH*T -->
-                                        <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">UNISEX SH*T</a>
-                                            <div class="ml-4 space-y-2">
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Latest Drops</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Just Restocked</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Shop Our Sh*t</a>
-                                                <a href="#" class="block font-mono text-sm text-gray-300 hover:text-white">Capsules</a>
-                                            </div>
-                                        </div>
-                                        
-                                        <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">COMMUNITY</a>
+                                        <a href="allproducts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="ALL OUR SH*T">ALL OUR SH*T</a>
+                                        <a href="collections/hoodies.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="HOODIES">HOODIES</a>
+                                        <a href="collections/t-shirts.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="T-SHIRTS">T-SHIRTS</a>
+                                        <a href="collections/pants.html" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="PANTS">PANTS</a>
                                         
                                         <!-- MY ACCOUNT -->
                                         <div class="space-y-2">
-                                            <a href="#" class="block font-mono font-bold text-lg hover:text-gray-300">MY ACCOUNT</a>
+                                            <a href="#" class="glitch-text block font-mono font-bold text-lg hover:text-gray-300" data-text="MY ACCOUNT">MY ACCOUNT</a>
                                             <div class="ml-4 space-y-2">
-                                                <a href="account.html" class="block font-mono text-sm text-gray-300 hover:text-white">Account</a>
-                                                <a href="wishlist.html" class="block font-mono text-sm text-gray-300 hover:text-white">Wishlist</a>
+                                                <a href="#" id="account-link" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Account">Account</a>
+                                                <a href="wishlist.html" class="glitch-text block font-mono text-sm text-gray-300 hover:text-white" data-text="Wishlist">Wishlist</a>
                                             </div>
                                         </div>
                                     </nav>
@@ -306,8 +283,8 @@
                     
                     <!-- Navigation Text -->
                     <div class="ml-6 flex space-x-6">
-                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
-                        <a href="#" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
+                        <a href="allproducts.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="SHOP OUR SH*T">SHOP OUR SH*T</a>
+                        <a href="latest-drops.html" class="glitch-text font-mono font-bold text-lg uppercase hover:text-gray-300 transition-colors" data-text="LATEST DROPS">LATEST DROPS</a>
                     </div>
                 </div>
                 <!-- Logo -->
@@ -352,11 +329,8 @@
                                     </button>
                                 </div>
                                 
-                                <div class="flex-1 flex flex-col justify-center items-center">
-                                    <p class="font-mono text-sm mb-4">empty :(</p>
-                                    <button class="bg-black text-white px-4 py-2 font-mono font-bold uppercase border-2 border-dashed border-white hover:bg-white hover:text-black transition-all duration-300 text-xs">
-                                        ADD SOME CHAOS
-                                    </button>
+                                <div class="cart-content flex-1 overflow-y-auto">
+                                    <!-- El contenido del carrito se renderizará aquí -->
                                 </div>
                             </div>
                         </div>
@@ -656,19 +630,119 @@
 
             // Funcionalidad del botón Add to Cart
             const addToCartBtn = document.querySelector('.add-to-cart-btn');
-            addToCartBtn.addEventListener('click', function() {
-                // Aquí puedes agregar la lógica para agregar al carrito
-                console.log('Producto agregado al carrito');
-                // Mostrar notificación
+            addToCartBtn.addEventListener('click', async function() {
+                console.log('🛒 Botón ADD TO CART pulsado en individual-offer.html');
+                
+                // Obtener la talla seleccionada
+                const selectedSizeButton = document.querySelector('.size-button.selected');
+                if (!selectedSizeButton) {
+                    showNotification('Por favor, selecciona una talla');
+                    return;
+                }
+                const selectedSize = selectedSizeButton.getAttribute('data-size');
+                
+                // Obtener datos del producto
+                const productId = getProductIdFromUrl();
+                const productName = document.querySelector('.product-name')?.textContent || '';
+                const productPrice = document.querySelector('.product-price')?.textContent || '';
+                const productImage = document.querySelector('#center-image')?.src || '';
+                
+                console.log('📦 Datos del producto:', {
+                    productId,
+                    productName,
+                    productPrice,
+                    selectedSize
+                });
+                
+                // Añadir al carrito con cantidad 1 (cada clic añade 1 unidad)
+                await addToCartFromIndividualOffer(productId, productName, productPrice, productImage, selectedSize, 1);
+            });
+
+            // Función para añadir al carrito desde individual-offer
+            async function addToCartFromIndividualOffer(productId, productName, productPrice, productImage, size, quantity) {
+                console.log('🛒 Iniciando proceso de añadir al carrito desde individual-offer...');
+                
+                try {
+                    const token = localStorage.getItem('cronox-token');
+                    if (!token) {
+                        console.error('❌ No hay token de autenticación');
+                        showNotification('Debes iniciar sesión para añadir productos al carrito');
+                        return;
+                    }
+                    
+                    // Validar y convertir datos
+                    const productIdInt = parseInt(productId);
+                    const quantityInt = parseInt(quantity);
+                    
+                    // Validar que los datos son correctos
+                    if (isNaN(productIdInt) || productIdInt <= 0) {
+                        console.error('❌ Product ID inválido:', productId);
+                        showNotification('Error: ID de producto inválido');
+                        return;
+                    }
+                    
+                    if (!['S', 'M', 'L', 'XL'].includes(size)) {
+                        console.error('❌ Talla inválida:', size);
+                        showNotification('Error: Talla inválida');
+                        return;
+                    }
+                    
+                    if (isNaN(quantityInt) || quantityInt <= 0) {
+                        console.error('❌ Cantidad inválida:', quantity);
+                        showNotification('Error: Cantidad inválida');
+                        return;
+                    }
+                    
+                    const requestData = {
+                        product_id: productIdInt,
+                        type: size,
+                        quantity: quantityInt
+                    };
+                    
+                    console.log('📤 Enviando al servidor:', requestData);
+                    
+                    const response = await fetch('/api/cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        console.log('✅ PRODUCTO AÑADIDO EXITOSAMENTE AL CARRITO');
+                        showNotification(`${productName} (Talla: ${size}) añadido al carrito`);
+                        
+                        // Actualizar el carrito usando global-cart.js
+                        if (window.globalCartManager) {
+                            await window.globalCartManager.loadCart();
+                        }
+                    } else {
+                        console.error('❌ ERROR AL AÑADIR AL CARRITO:', result);
+                        const errorMessage = result.message || `Error del servidor (${response.status})`;
+                        showNotification('Error añadiendo al carrito: ' + errorMessage);
+                    }
+                    
+                } catch (error) {
+                    console.error('💥 ERROR CRÍTICO AL AÑADIR AL CARRITO:', error);
+                    showNotification('Error añadiendo al carrito');
+                }
+            }
+
+            // Función para mostrar notificaciones
+            function showNotification(message) {
                 const notification = document.createElement('div');
                 notification.className = 'fixed top-20 right-4 bg-black text-white px-4 py-2 rounded font-mono text-sm z-50';
-                notification.textContent = 'Producto agregado al carrito';
+                notification.textContent = message;
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
                     notification.remove();
                 }, 3000);
-            });
+            }
 
             // ===== FUNCIONALIDAD DINÁMICA DE PRODUCTOS =====
             
@@ -939,6 +1013,13 @@
             }, 1000);
         });
     </script>
+
+    <!-- Script del carrito global -->
+    <script src="js/global-cart.js"></script>
+    
+    <!-- Script del efecto glitch -->
+    <script src="js/glitch-effect.js"></script>
+    <script src="js/menu-search.js"></script>
 
 </body>
 </html>

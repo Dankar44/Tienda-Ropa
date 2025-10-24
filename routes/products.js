@@ -31,6 +31,35 @@ router.get('/top-favourites', async (req, res) => {
     }
 });
 
+// GET /api/products/latest-drops - Obtener los últimos 5 productos añadidos
+router.get('/latest-drops', async (req, res) => {
+    try {
+        const { limit = 5 } = req.query;
+        
+        const sql = `
+            SELECT p.*, COALESCE(p.favourites, 0) as favourites
+            FROM products p
+            WHERE p.is_active = true
+            ORDER BY p.id DESC, p.created_at DESC
+            LIMIT $1
+        `;
+        
+        const result = await query(sql, [parseInt(limit)]);
+        
+        res.json({
+            success: true,
+            data: result.rows,
+            total: result.rows.length
+        });
+    } catch (error) {
+        console.error('Error obteniendo latest drops:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Error interno del servidor'
+        });
+    }
+});
+
 // GET /api/products - Obtener todos los productos
 router.get('/', async (req, res) => {
     try {
